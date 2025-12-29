@@ -1,0 +1,2 @@
+experiment_name: cats_vs_bread_experiment
+tracking_uri: 127.0.0.1:5000

@@ -1,5 +1,6 @@
 # Project artifacts
-/data/
+/data/**/
+!/data/*.dvc
 /artifacts/
 /outputs/
 /.dvc/tmp/

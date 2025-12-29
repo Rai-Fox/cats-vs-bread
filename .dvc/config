@@ -2,4 +2,5 @@
     autostage = true
     remote = s3_remote
 ['remote "s3_remote"']
-    url = https://storage.yandexcloud.net/sborodachev-cats-vs-bread
+    url = s3://sborodachev-cats-vs-bread
+    endpointurl = https://storage.yandexcloud.net

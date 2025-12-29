@@ -3,10 +3,6 @@ stages:
     cmd: uv run train.py
     deps:
       - train.py
-      - configs/config.yaml
+      - configs/
       - data/train/
       - data/val/
-    outs:
-      - artifacts/model/
-    params:
-      - configs/config.yaml

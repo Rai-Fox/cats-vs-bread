@@ -1,0 +1,24 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: uv run train.py
+    deps:
+    - path: configs/
+      hash: md5
+      md5: 6dc71120d12004811fd71074947a5a3c.dir
+      size: 138
+      nfiles: 1
+    - path: data/train/
+      hash: md5
+      md5: 2374a8f1d969b56bd1370593d054957e.dir
+      size: 252337765
+      nfiles: 12912
+    - path: data/val/
+      hash: md5
+      md5: 48c0885647b9ee1c22ac02bd648156fc.dir
+      size: 63055155
+      nfiles: 3227
+    - path: train.py
+      hash: md5
+      md5: aa1471451d6fb672bfbc815ccdfa9082
+      size: 147

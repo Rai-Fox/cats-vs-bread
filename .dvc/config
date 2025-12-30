@@ -4,3 +4,4 @@
 ['remote "s3_remote"']
     url = s3://sborodachev-cats-vs-bread
     endpointurl = https://storage.yandexcloud.net
+    allow_anonymous_login = true

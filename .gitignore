@@ -6,6 +6,7 @@
 /.dvc/tmp/
 /.dvc/cache/
 /.hydra/
+mlflow.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

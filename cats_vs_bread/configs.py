@@ -3,9 +3,10 @@ from pathlib import Path
 
 import hydra
 from hydra.core.config_store import ConfigStore
+from omegaconf import DictConfig, OmegaConf
 
 DIR = Path(__file__).parent.parent
-CONFIG_DIR = DIR / "configs"
+CONFIG_DIR = "../configs"
 CONFIG_NAME = "config"
 
 
@@ -21,6 +22,8 @@ class ModelConfig:
 class DataConfig:
     train_dir: Path
     val_dir: Path
+    num_workers: int
+    batch_size: int
 
 
 @dataclass
@@ -31,11 +34,6 @@ class MLFlowLoggerConfig:
 
 @dataclass
 class TrainConfig:
-    model: ModelConfig
-    data: DataConfig
-    logger: MLFlowLoggerConfig
-
-    batch_size: int
     max_epochs: int
     learning_rate: float
 
@@ -43,18 +41,28 @@ class TrainConfig:
 @dataclass
 class CatsVsBreadConfig:
     train: TrainConfig
+    model: ModelConfig
+    data: DataConfig
+    logger: MLFlowLoggerConfig
 
 
 cs = ConfigStore.instance()
-cs.store(name=CONFIG_NAME, node=CatsVsBreadConfig)
+cs.store(name=f"{CONFIG_NAME}_schema", node=CatsVsBreadConfig)
+
+
+def to_dataclass(cfg: DictConfig, schema_type: type[CatsVsBreadConfig]) -> CatsVsBreadConfig:
+    schema_cfg = OmegaConf.structured(schema_type)
+    merged = OmegaConf.merge(schema_cfg, cfg)
+    obj = OmegaConf.to_object(merged)
+    return obj  # type: ignore
 
 
 def compose_config(
     overrides: list[str] | None = None,
-    config_path: Path = CONFIG_DIR,
+    config_path: str = CONFIG_DIR,
     config_name: str = CONFIG_NAME,
 ) -> CatsVsBreadConfig:
-    with hydra.initialize(version_base=None, config_path=str(config_path)):
+    with hydra.initialize(version_base=None, config_path=config_path):
         hydra_config = hydra.compose(config_name=config_name, overrides=overrides)
-        config = hydra.utils.instantiate(hydra_config, _recursive_=False)
+        config = to_dataclass(hydra_config, CatsVsBreadConfig)
         return config

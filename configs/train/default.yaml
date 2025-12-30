@@ -1,8 +1,0 @@
-defaults:
-  - model: default
-  - data: default
-  - logger: default
-
-batch_size: 32
-max_epochs: 10
-learning_rate: 0.001

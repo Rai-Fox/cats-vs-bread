@@ -1,13 +1,12 @@
+import timm
 import torch
 import torch.nn as nn
-import timm
-
 
 from cats_vs_bread.configs import ModelConfig
 
 
 class CatsVsBreadClassfier(nn.Module):
-    def __init__(self, model_config: ModelConfig):
+    def __init__(self, model_config: ModelConfig) -> None:
         super().__init__()
         self.model_config = model_config
 

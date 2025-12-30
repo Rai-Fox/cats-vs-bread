@@ -2,21 +2,20 @@ from typing import Any
 
 import torch
 import torch.nn.functional as F
-import torch.nn as nn
 import torchmetrics
-
 from lightning.pytorch import LightningModule
 from lightning.pytorch.utilities.types import STEP_OUTPUT
 
-from cats_vs_bread.configs import TrainConfig
+from cats_vs_bread.configs import ModelConfig, TrainConfig
 from cats_vs_bread.models.model import CatsVsBreadClassfier
 
 
 class CatsVsBreadModel(LightningModule):
-    def __init__(self, config: TrainConfig):
+    def __init__(self, model_config: ModelConfig, train_config: TrainConfig) -> None:
         super().__init__()
-        self.config = config
-        self.model = CatsVsBreadClassfier(model_config=self.config.model)
+        self.model_config = model_config
+        self.train_config = train_config
+        self.model = CatsVsBreadClassfier(model_config=self.model_config)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.model(x)
@@ -25,9 +24,9 @@ class CatsVsBreadModel(LightningModule):
         preds = torch.argmax(logits, dim=1)
         accuracy = (preds == labels).float().mean()
         f1_score = torchmetrics.functional.f1_score(
-            preds, labels, num_classes=self.config.model.num_classes, average="macro", task="binary"
+            preds, labels, num_classes=self.model_config.num_classes, average="macro", task="binary"
         )
-        roc_auc = torchmetrics.functional.auroc(F.softmax(logits, dim=1), labels, task="binary")
+        roc_auc = torchmetrics.functional.auroc(F.softmax(logits, dim=1)[:, 1], labels, task="binary")
         return {
             "accuracy": accuracy.item(),
             "f1_score": f1_score.item(),
@@ -39,13 +38,13 @@ class CatsVsBreadModel(LightningModule):
         loss = F.cross_entropy(logits, labels)
         return logits, loss
 
-    def training_step(self, batch: Any, batch_idx: int) -> STEP_OUTPUT:
+    def training_step(self, batch: Any, batch_idx: int) -> STEP_OUTPUT:  # noqa: ANN401
         images, labels = batch
         _, loss = self._step(images, labels)
         self.log("train/loss", loss.item(), on_step=True, on_epoch=True, prog_bar=True, logger=True)
         return loss
 
-    def validation_step(self, batch: Any, batch_idx: int) -> STEP_OUTPUT:
+    def validation_step(self, batch: Any, batch_idx: int) -> STEP_OUTPUT:  # noqa: ANN401
         images, labels = batch
         logits, loss = self._step(images, labels)
         metrics = self._calc_metrics(logits, labels)
@@ -55,6 +54,6 @@ class CatsVsBreadModel(LightningModule):
         return loss
 
     def configure_optimizers(self) -> torch.optim.Optimizer:
-        optimizer = torch.optim.AdamW(self.parameters(), lr=self.config.learning_rate)
+        optimizer = torch.optim.AdamW(self.parameters(), lr=self.train_config.learning_rate)
 
         return optimizer

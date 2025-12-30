@@ -1,0 +1,18 @@
+services:
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: mlflow
+    ports:
+      - "8080:8080"
+    environment:
+      MLFLOW_HOST: 0.0.0.0
+      MLFLOW_PORT: 8080
+    volumes:
+      - ./mlruns:/mlruns
+      - ./mlflow_db:/db
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 8080
+      --backend-store-uri sqlite:////db/mlflow.db
+      --artifacts-destination /mlruns

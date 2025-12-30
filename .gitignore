@@ -1,6 +1,8 @@
 # Project artifacts
 /data/**/
+/data/*.tar.gz
 !/data/*.dvc
+!/data/*tar.gz.dvc
 /artifacts/
 /outputs/
 /.dvc/tmp/

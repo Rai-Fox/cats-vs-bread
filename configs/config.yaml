@@ -5,6 +5,10 @@ defaults:
 data:
   train_dir: data/train
   val_dir: data/val
+  train_archive: data/train.tar.gz
+  val_archive: data/val.tar.gz
+  dvc_remote: s3_remote
+  force_extract: false
   num_workers: 1
   batch_size: 128
 

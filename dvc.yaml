@@ -4,5 +4,5 @@ stages:
     deps:
       - train.py
       - configs/
-      - data/train/
-      - data/val/
+      - data/train.tar.gz
+      - data/val.tar.gz

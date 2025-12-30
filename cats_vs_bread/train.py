@@ -7,10 +7,12 @@ from lightning.pytorch.loggers import MLFlowLogger
 from cats_vs_bread.configs import CatsVsBreadConfig
 from cats_vs_bread.models.data_module import CatsVsBreadDataModule
 from cats_vs_bread.models.lightning_module import CatsVsBreadModel
+from cats_vs_bread.utils import dvc_utils
 
 
 def train_model(config: CatsVsBreadConfig) -> None:
     torch.set_float32_matmul_precision("medium")
+    dvc_utils.pull_and_unpack_data(data_config=config.data)
     data_module = CatsVsBreadDataModule(data_config=config.data)
     lightning_model = CatsVsBreadModel(model_config=config.model, train_config=config.train)
     logger = MLFlowLogger(

@@ -24,6 +24,10 @@ class ModelConfig:
 class DataConfig:
     train_dir: Path
     val_dir: Path
+    train_archive: Path
+    val_archive: Path
+    dvc_remote: str
+    force_extract: bool
     num_workers: int
     batch_size: int
 

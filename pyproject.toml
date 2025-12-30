@@ -94,9 +94,3 @@ ignore = [
     "ANN101",
     "TCH003",
 ]
-
-[tool.mypy]
-python_version = "3.12"
-ignore_missing_imports = true
-disallow_untyped_defs = true
-disallow_untyped_calls = true

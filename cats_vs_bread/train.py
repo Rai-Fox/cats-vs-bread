@@ -18,7 +18,6 @@ def train_model(config: CatsVsBreadConfig) -> None:
         tracking_uri=config.logger.tracking_uri,
     )
     logger.log_hyperparams(dataclasses.asdict(config))
-
     trainer = Trainer(
         max_epochs=config.train.max_epochs,
         logger=logger,

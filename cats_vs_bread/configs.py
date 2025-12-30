@@ -5,6 +5,8 @@ import hydra
 from hydra.core.config_store import ConfigStore
 from omegaconf import DictConfig, OmegaConf
 
+from cats_vs_bread.utils.git_utils import git_commit_id
+
 DIR = Path(__file__).parent.parent
 CONFIG_DIR = "../configs"
 CONFIG_NAME = "config"
@@ -44,7 +46,14 @@ class CatsVsBreadConfig:
     model: ModelConfig
     data: DataConfig
     logger: MLFlowLoggerConfig
+    git_commit_id: str
 
+
+def git_commit_id_resolver() -> str:
+    return git_commit_id()
+
+
+OmegaConf.register_new_resolver("git_commit_id", git_commit_id_resolver)
 
 cs = ConfigStore.instance()
 cs.store(name=f"{CONFIG_NAME}_schema", node=CatsVsBreadConfig)

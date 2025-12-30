@@ -3,7 +3,7 @@ import logging
 LOG_FORMAT = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
 
 
-def get_logger(log_level: str = "INFO", name: str | None = None) -> logging.Logger:
+def get_logger(name: str | None = None, log_level: str = "INFO") -> logging.Logger:
     logger = logging.getLogger(name)
 
     if logger.handlers:

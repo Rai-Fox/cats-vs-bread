@@ -54,7 +54,7 @@
 Для обучения модели выполните команду:
 
 ```bash
-uv run cats_vs_bread.py train.max_epochs=3
+uv run cats_vs_bread.py train train.max_epochs=3
 ```
 
 Можно переопределить гиперпараметры через CLI. Например:
